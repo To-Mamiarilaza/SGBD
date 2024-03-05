@@ -1,0 +1,62 @@
+  // Fonction pour trier avec tri fusion
+    public int[] dropFirstElement(int[] tab) {
+        int[] result = new int[tab.length - 1];
+        for(int i = 0; i < result.length; i++) {
+            result[i] = tab[i + 1];
+        }
+        return result;
+    }
+
+    public int[] concatWithNumber(int number, int[] tab) {
+        int[] tableau = new int[tab.length + 1];
+        tableau[0] = number;
+        for(int i = 1; i < tab.length + 1; i++) {
+            tableau[i] = tab[i-1];
+        }
+        return tableau;
+    }
+
+    public int[] fusion(int[] tabA, int[] tabB) {
+        if (tabA.length == 0) {
+            return tabB;
+        }
+        else if (tabB.length == 0) {
+            return tabA;
+        }
+        else if (tabA[0] <= tabB[0]) {
+            return concatWithNumber(tabA[0], fusion(dropFirstElement(tabA), tabB));
+        }
+        else {
+            return concatWithNumber(tabB[0], fusion(tabA, dropFirstElement(tabB)));
+        }
+    }
+
+    public int[][] separate(int[] tabBefore) {
+        int taille1 = tabBefore.length / 2;
+        int taille2 = tabBefore.length - taille1;
+        int[] result1 = new int[taille1];
+        int[] result2 = new int[taille2];
+        int indice = 0;
+        for(int i = 0; i < result1.length; i++) {
+            result1[i] = tabBefore[indice];
+            indice++;
+        }
+        for(int i = 0; i < result2.length; i++) {
+            result2[i] = tabBefore[indice];
+            indice++;
+        }
+        int[][] finalResult = new int[2][];
+        finalResult[0] = result1;
+        finalResult[1] = result2;
+        return finalResult;
+    }
+
+    public int[] triFusion(int[] tabBefore) {
+        if (tabBefore.length <= 1) {
+            return tabBefore;
+        }
+        else {
+            int[][] division = separate(tabBefore);
+            return fusion(triFusion(division[0]), triFusion(division[1]));
+        }
+    } 
